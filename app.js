@@ -264,6 +264,49 @@ async function deleteBill(id) {
 
 window.deleteBill = deleteBill;
 
+async function editBill(id) {
+
+    const bill = currentBills.find(
+        b => b.id === id
+    );
+
+    if (!bill) return;
+
+    const newBillName = prompt(
+        "Bill Name",
+        bill.billName
+    );
+
+    if (newBillName === null) return;
+
+    const newAmount = prompt(
+        "Amount",
+        bill.amount
+    );
+
+    if (newAmount === null) return;
+
+    const newDueDate = prompt(
+        "Due Date (YYYY-MM-DD)",
+        bill.dueDate
+    );
+
+    if (newDueDate === null) return;
+
+    await updateDoc(
+        doc(db, "bills", id),
+        {
+            billName: newBillName,
+            amount: Number(newAmount),
+            dueDate: newDueDate
+        }
+    );
+
+    loadBills();
+}
+
+window.editBill = editBill;
+
 async function loadBills() {
 
     billList.innerHTML = "";
