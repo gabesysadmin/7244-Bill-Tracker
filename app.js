@@ -481,59 +481,128 @@ async function archiveBill(id) {
 
 window.archiveBill = archiveBill;
 
-async function editBill(id) {
+function editBill(id) {
 
-    const bill = currentBills.find(
-        b => b.id === id
-    );
+    const bill =
+        currentBills.find(
+            b => b.id === id
+        );
 
     if (!bill) return;
 
-    const newBillName = prompt(
-        "Bill Name",
-        bill.billName
-    );
+    document.getElementById(
+        "editBillId"
+    ).value = bill.id;
 
-    if (newBillName === null) return;
+    document.getElementById(
+        "editBillName"
+    ).value = bill.billName;
 
-    const newAmount = prompt(
-        "Amount",
-        bill.amount
-    );
+    document.getElementById(
+        "editAmount"
+    ).value = bill.amount;
 
-    if (newAmount === null) return;
+    document.getElementById(
+        "editDueDate"
+    ).value = bill.dueDate;
 
-    const newDueDate = prompt(
-        "Due Date (YYYY-MM-DD)",
-        bill.dueDate
-    );
+    document.getElementById(
+        "editNotes"
+    ).value =
+        bill.notes || "";
 
-    if (newDueDate === null) return;
+    document.getElementById(
+        "editRecurring"
+    ).checked =
+        bill.recurring || false;
 
-    const newNotes = prompt(
-    "Notes",
-    bill.notes || ""
-);
-
-if (newNotes === null) return;
-
-    await updateDoc(
-    doc(db, "bills", id),
-    {
-        billName: newBillName,
-
-        amount: Number(newAmount),
-
-        dueDate: newDueDate,
-
-        notes: newNotes
-    }
-);
-
-    loadBills();
+    document.getElementById(
+        "editModal"
+    ).style.display =
+        "flex";
 }
 
 window.editBill = editBill;
+
+const saveEditBtn =
+    document.getElementById(
+        "saveEditBtn"
+    );
+
+const cancelEditBtn =
+    document.getElementById(
+        "cancelEditBtn"
+    );
+
+if (saveEditBtn) {
+
+    saveEditBtn.addEventListener(
+        "click",
+        saveEdit
+    );
+}
+
+if (cancelEditBtn) {
+
+    cancelEditBtn.addEventListener(
+        "click",
+        closeEditModal
+    );
+}
+
+function closeEditModal() {
+
+    document.getElementById(
+        "editModal"
+    ).style.display =
+        "none";
+}
+
+async function saveEdit() {
+
+    const id =
+        document.getElementById(
+            "editBillId"
+        ).value;
+
+    await updateDoc(
+        doc(db, "bills", id),
+        {
+
+            billName:
+                document.getElementById(
+                    "editBillName"
+                ).value,
+
+            amount:
+                Number(
+                    document.getElementById(
+                        "editAmount"
+                    ).value
+                ),
+
+            dueDate:
+                document.getElementById(
+                    "editDueDate"
+                ).value,
+
+            notes:
+                document.getElementById(
+                    "editNotes"
+                ).value,
+
+            recurring:
+                document.getElementById(
+                    "editRecurring"
+                ).checked
+
+        }
+    );
+
+    closeEditModal();
+
+    loadBills();
+}
 
 async function loadBills() {
 
