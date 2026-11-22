@@ -90,3 +90,8 @@ button {
 .delete-btn {
     background: #dc2626;
 }
+
+#welcomeBanner {
+    margin-bottom: 15px;
+    color: #2563eb;
+}
