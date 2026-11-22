@@ -116,14 +116,22 @@ async function enableNotifications() {
             return;
         }
 
-        const token =
-            await getToken(
-                messaging,
-                {
-                    vapidKey:
-                        "BLvLnNDzFXIRUgNg5Fb3xhzImxyBur_99fP68OujA4Y_eUl14UCuKx1ThUlGSxZsWC5x_hLxnrhlJdhibIRpJLI"
-                }
-            );
+        const registration =
+    await navigator.serviceWorker.register(
+        "/family-bill-tracker/firebase-messaging-sw.js"
+    );
+
+const token =
+    await getToken(
+        messaging,
+        {
+            vapidKey:
+                "BLvLnNDzFXIRUgNg5Fb3xhzImxyBur_99fP68OujA4Y_eUl14UCuKx1ThUlGSxZsWC5x_hLxnrhlJdhibIRpJLI",
+
+            serviceWorkerRegistration:
+                registration
+        }
+    );
 
         if (!token) {
 
