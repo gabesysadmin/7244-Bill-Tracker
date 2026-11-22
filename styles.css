@@ -69,14 +69,14 @@ button {
     color: #2563eb;
 }
 
-.paid {
-    border-left: 6px solid #16a34a;
+.due {
+    border-left: 6px solid #f59e0b;
 }
 
 .overdue {
     border-left: 6px solid #dc2626;
 }
 
-.due {
-    border-left: 6px solid #f59e0b;
+.paid {
+    border-left: 6px solid #16a34a;
 }
