@@ -15,6 +15,7 @@ let currentUser = null;
 let currentBills = [];
 let activeStatusFilter = "all";
 let activePersonFilter = "all";
+let showingArchived = false;
 
 const form = document.getElementById("billForm");
 const billList = document.getElementById("billList");
@@ -26,6 +27,8 @@ const statusFilter =
 
 const personFilter =
     document.getElementById("personFilter");
+const toggleArchivedBtn =
+    document.getElementById("toggleArchivedBtn");
 
 if (loginBtn) {
     loginBtn.addEventListener("click", login);
@@ -52,6 +55,24 @@ if (personFilter) {
 
             activePersonFilter =
                 personFilter.value;
+
+            loadBills();
+        }
+    );
+}
+if (toggleArchivedBtn) {
+
+    toggleArchivedBtn.addEventListener(
+        "click",
+        () => {
+
+            showingArchived =
+                !showingArchived;
+
+            toggleArchivedBtn.textContent =
+                showingArchived
+                    ? "Show Active"
+                    : "Show Archived";
 
             loadBills();
         }
@@ -233,7 +254,8 @@ notes:
 recurring:
             document.getElementById("recurring").checked,
 
-        status: "Due"
+        status: "Due",
+        archived: false
 
     };
 
@@ -302,7 +324,9 @@ amount:
 
                 recurring: true,
 
-                status: "Due"
+                status: "Due",
+                archived: false
+                
             }
         );
     }
@@ -326,6 +350,20 @@ async function deleteBill(id) {
 }
 
 window.deleteBill = deleteBill;
+
+async function archiveBill(id) {
+
+    await updateDoc(
+        doc(db, "bills", id),
+        {
+            archived: true
+        }
+    );
+
+    loadBills();
+}
+
+window.archiveBill = archiveBill;
 
 async function editBill(id) {
 
@@ -407,6 +445,20 @@ async function loadBills() {
             id: billDoc.id,
             ...billDoc.data()
         };
+
+        if (
+    showingArchived &&
+    !bill.archived
+) {
+    return;
+}
+
+if (
+    !showingArchived &&
+    bill.archived
+) {
+    return;
+}
 
         if (currentUser.role === "admin") {
 
@@ -589,11 +641,23 @@ ${
             : ""
         }
 
-        <button
-            class="delete-btn"
-            onclick="deleteBill('${bill.id}')">
-            Delete
-        </button>
+        ${
+    bill.status === "Paid" &&
+    !bill.archived
+    ? `
+    <button
+        onclick="archiveBill('${bill.id}')">
+        Archive
+    </button>
+    `
+    : ""
+}
+
+<button
+    class="delete-btn"
+    onclick="deleteBill('${bill.id}')">
+    Delete
+</button>
 
     </div>
     `
