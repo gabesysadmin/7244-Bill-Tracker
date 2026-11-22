@@ -121,6 +121,8 @@ async function enableNotifications() {
         "/family-bill-tracker/firebase-messaging-sw.js"
     );
 
+await navigator.serviceWorker.ready;
+
 const token =
     await getToken(
         messaging,
