@@ -15,6 +15,7 @@ let currentUser = null;
 
 const form = document.getElementById("billForm");
 const billList = document.getElementById("billList");
+const assignedTo = document.getElementById("assignedTo");
 
 const loginBtn = document.getElementById("loginBtn");
 
@@ -46,7 +47,9 @@ async function login() {
     }
 
     snapshot.forEach((userDoc) => {
+
         currentUser = userDoc.data();
+
     });
 
     localStorage.setItem(
@@ -55,6 +58,8 @@ async function login() {
     );
 
     showApp();
+
+    loadUsers();
 }
 
 function logout() {
@@ -83,16 +88,61 @@ function showApp() {
     loadBills();
 }
 
+async function loadUsers() {
+
+    if (!assignedTo) {
+        return;
+    }
+
+    assignedTo.innerHTML = `
+        <option value="">
+            Select Family Member
+        </option>
+    `;
+
+    const snapshot =
+        await getDocs(
+            collection(db, "users")
+        );
+
+    snapshot.forEach((userDoc) => {
+
+        const user = userDoc.data();
+
+        if (user.role === "admin") {
+            return;
+        }
+
+        assignedTo.innerHTML += `
+            <option value="${user.username}">
+                ${user.username}
+            </option>
+        `;
+    });
+}
+
 form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
     const data = {
-        person: document.getElementById("person").value,
-        billName: document.getElementById("billName").value,
-        amount: Number(document.getElementById("amount").value),
-        dueDate: document.getElementById("dueDate").value,
+
+        assignedTo:
+            document.getElementById("assignedTo").value,
+
+        billName:
+            document.getElementById("billName").value,
+
+        amount:
+            Number(
+                document.getElementById("amount").value
+            ),
+
+        dueDate:
+            document.getElementById("dueDate").value,
+
         status: "Due"
+
     };
 
     await addDoc(
@@ -107,12 +157,20 @@ form.addEventListener("submit", async (e) => {
 
 async function markPaid(id) {
 
-    const billRef = doc(db, "bills", id);
+    const billRef = doc(
+        db,
+        "bills",
+        id
+    );
 
-    await updateDoc(billRef, {
-        status: "Paid",
-        paidDate: new Date().toISOString()
-    });
+    await updateDoc(
+        billRef,
+        {
+            status: "Paid",
+            paidDate:
+                new Date().toISOString()
+        }
+    );
 
     loadBills();
 }
@@ -126,7 +184,11 @@ async function deleteBill(id) {
     }
 
     await deleteDoc(
-        doc(db, "bills", id)
+        doc(
+            db,
+            "bills",
+            id
+        )
     );
 
     loadBills();
@@ -143,7 +205,9 @@ async function loadBills() {
     let paidCount = 0;
 
     const snapshot =
-        await getDocs(collection(db, "bills"));
+        await getDocs(
+            collection(db, "bills")
+        );
 
     const bills = [];
 
@@ -160,32 +224,46 @@ async function loadBills() {
 
         const today = new Date();
 
-        const aPaid = a.status === "Paid";
-        const bPaid = b.status === "Paid";
+        const aPaid =
+            a.status === "Paid";
+
+        const bPaid =
+            b.status === "Paid";
 
         if (aPaid && !bPaid) return 1;
         if (!aPaid && bPaid) return -1;
 
         const aOverdue =
-            new Date(a.dueDate) < today && !aPaid;
+            new Date(a.dueDate) < today &&
+            !aPaid;
 
         const bOverdue =
-            new Date(b.dueDate) < today && !bPaid;
+            new Date(b.dueDate) < today &&
+            !bPaid;
 
         if (aOverdue && !bOverdue) return -1;
         if (!aOverdue && bOverdue) return 1;
 
-        return new Date(a.dueDate) -
-               new Date(b.dueDate);
+        return (
+            new Date(a.dueDate) -
+            new Date(b.dueDate)
+        );
+
     });
 
     bills.forEach((bill) => {
 
         const today = new Date();
 
-        today.setHours(0, 0, 0, 0);
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
 
-        const dueDate = new Date(bill.dueDate);
+        const dueDate =
+            new Date(bill.dueDate);
 
         const diffDays = Math.ceil(
             (dueDate - today) /
@@ -193,14 +271,20 @@ async function loadBills() {
         );
 
         let cardClass = "";
-        let displayStatus = bill.status;
+        let displayStatus =
+            bill.status;
 
-        if (bill.status === "Paid") {
+        if (
+            bill.status === "Paid"
+        ) {
 
             cardClass = "paid";
+
             displayStatus = "Paid";
 
-        } else if (diffDays < 0) {
+        } else if (
+            diffDays < 0
+        ) {
 
             cardClass = "overdue";
 
@@ -213,36 +297,50 @@ async function loadBills() {
 
             overdueCount++;
 
-        } else if (diffDays === 0) {
+        } else if (
+            diffDays === 0
+        ) {
 
             cardClass = "due";
-            displayStatus = "Due Today";
 
-        } else if (diffDays === 1) {
+            displayStatus =
+                "Due Today";
+
+        } else if (
+            diffDays === 1
+        ) {
 
             cardClass = "due";
-            displayStatus = "Due Tomorrow";
+
+            displayStatus =
+                "Due Tomorrow";
 
         } else {
 
             cardClass = "due";
+
             displayStatus =
                 `Due in ${diffDays} days`;
+
         }
 
-        if (bill.status === "Paid") {
+        if (
+            bill.status === "Paid"
+        ) {
 
             paidCount++;
 
         } else {
 
-            outstandingTotal += bill.amount;
+            outstandingTotal +=
+                bill.amount;
+
         }
 
         billList.innerHTML += `
             <div class="bill-card ${cardClass}">
 
-                <h3>${bill.person}</h3>
+                <h3>${bill.assignedTo}</h3>
 
                 <p>${bill.billName}</p>
 
@@ -250,21 +348,31 @@ async function loadBills() {
 
                 <p>Due: ${bill.dueDate}</p>
 
-                <p><strong>${displayStatus}</strong></p>
+                <p>
+                    <strong>
+                        ${displayStatus}
+                    </strong>
+                </p>
 
                 <div class="button-group">
 
                     ${
                         bill.status !== "Paid"
-                        ? `<button onclick="markPaid('${bill.id}')">
+                        ? `
+                        <button
+                            onclick="markPaid('${bill.id}')">
                             Mark Paid
-                           </button>`
+                        </button>
+                        `
                         : ""
                     }
 
-                    <button class="delete-btn"
-                            onclick="deleteBill('${bill.id}')">
+                    <button
+                        class="delete-btn"
+                        onclick="deleteBill('${bill.id}')">
+
                         Delete
+
                     </button>
 
                 </div>
@@ -273,18 +381,26 @@ async function loadBills() {
         `;
     });
 
-    document.getElementById("outstandingTotal").textContent =
+    document.getElementById(
+        "outstandingTotal"
+    ).textContent =
         `$${outstandingTotal.toFixed(2)}`;
 
-    document.getElementById("overdueCount").textContent =
+    document.getElementById(
+        "overdueCount"
+    ).textContent =
         overdueCount;
 
-    document.getElementById("paidCount").textContent =
+    document.getElementById(
+        "paidCount"
+    ).textContent =
         paidCount;
 }
 
 const savedUser =
-    localStorage.getItem("currentUser");
+    localStorage.getItem(
+        "currentUser"
+    );
 
 if (savedUser) {
 
@@ -292,4 +408,6 @@ if (savedUser) {
         JSON.parse(savedUser);
 
     showApp();
+
+    loadUsers();
 }
