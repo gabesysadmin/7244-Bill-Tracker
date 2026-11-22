@@ -115,7 +115,7 @@ async function loadUsers() {
 
         assignedTo.innerHTML += `
             <option value="${user.username}">
-                ${user.displayName}
+                ${user.displayname}
             </option>
         `;
     });
@@ -135,7 +135,7 @@ form.addEventListener("submit", async (e) => {
         assignedTo:
             assignedTo.value,
 
-        displayName:
+        displayname:
             selectedUser.text,
 
         billName:
@@ -362,7 +362,7 @@ async function loadBills() {
             <div class="bill-card ${cardClass}">
 
                 <h3>
-                    ${bill.displayName || bill.assignedTo}
+                    ${bill.displayname || bill.assignedTo}
                 </h3>
 
                 <p>${bill.billName}</p>
