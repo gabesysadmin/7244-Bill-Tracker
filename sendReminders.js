@@ -89,15 +89,15 @@ const db = admin.firestore();
         let title = null;
         let body = null;
 
-        if (diffDays === 1) {
+        if (diffDays === 5) {
 
-            title =
-                "Bill Due Tomorrow";
+    title =
+        "Bill Due In 5 Days";
 
-            body =
-                `${bill.billName} ($${bill.amount}) is due tomorrow.`;
+    body =
+        `${bill.billName} ($${bill.amount}) is due in 5 days.`;
 
-        }
+}
         else if (diffDays === 0) {
 
             title =
