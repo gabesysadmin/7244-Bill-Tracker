@@ -225,9 +225,12 @@ form.addEventListener("submit", async (e) => {
             ),
 
         dueDate:
-            document.getElementById("dueDate").value,
+    document.getElementById("dueDate").value,
 
-        recurring:
+notes:
+    document.getElementById("notes").value,
+
+recurring:
             document.getElementById("recurring").checked,
 
         status: "Due"
@@ -284,9 +287,12 @@ async function markPaid(id) {
                     bill.displayname,
 
                 billName:
-                    bill.billName,
+    bill.billName,
 
-                amount:
+notes:
+    bill.notes || "",
+
+amount:
                     bill.amount,
 
                 dueDate:
@@ -350,14 +356,25 @@ async function editBill(id) {
 
     if (newDueDate === null) return;
 
+    const newNotes = prompt(
+    "Notes",
+    bill.notes || ""
+);
+
+if (newNotes === null) return;
+
     await updateDoc(
-        doc(db, "bills", id),
-        {
-            billName: newBillName,
-            amount: Number(newAmount),
-            dueDate: newDueDate
-        }
-    );
+    doc(db, "bills", id),
+    {
+        billName: newBillName,
+
+        amount: Number(newAmount),
+
+        dueDate: newDueDate,
+
+        notes: newNotes
+    }
+);
 
     loadBills();
 }
@@ -539,6 +556,12 @@ if (
                 <p>$${bill.amount.toFixed(2)}</p>
 
                 <p>Due: ${bill.dueDate}</p>
+
+${
+    bill.notes
+        ? `<p><strong>Notes:</strong><br>${bill.notes}</p>`
+        : ""
+}
 
                 <p>
                     <strong>
