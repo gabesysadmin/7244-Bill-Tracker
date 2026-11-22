@@ -1,11 +1,11 @@
 import { db } from "./firebase-config.js";
 
 import {
-  collection,
-  addDoc,
-  getDocs,
-  updateDoc,
-  doc
+    collection,
+    addDoc,
+    getDocs,
+    updateDoc,
+    doc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const form = document.getElementById("billForm");
@@ -31,7 +31,6 @@ form.addEventListener("submit", async (e) => {
     form.reset();
 
     loadBills();
-
 });
 
 async function markPaid(id) {
@@ -60,61 +59,96 @@ async function loadBills() {
         collection(db, "bills")
     );
 
+    const bills = [];
+
     snapshot.forEach((billDoc) => {
 
-        const bill = billDoc.data();
+        bills.push({
+            id: billDoc.id,
+            ...billDoc.data()
+        });
+
+    });
+
+    bills.sort((a, b) => {
+
         const today = new Date();
-today.setHours(0, 0, 0, 0);
 
-const dueDate = new Date(bill.dueDate);
+        const aPaid = a.status === "Paid";
+        const bPaid = b.status === "Paid";
 
-const diffTime = dueDate - today;
+        if (aPaid && !bPaid) return 1;
+        if (!aPaid && bPaid) return -1;
 
-const diffDays = Math.ceil(
-    diffTime / (1000 * 60 * 60 * 24)
-);
+        const aOverdue =
+            new Date(a.dueDate) < today && !aPaid;
 
-let cardClass = "";
-let displayStatus = bill.status;
+        const bOverdue =
+            new Date(b.dueDate) < today && !bPaid;
 
-if (bill.status === "Paid") {
+        if (aOverdue && !bOverdue) return -1;
+        if (!aOverdue && bOverdue) return 1;
 
-    cardClass = "paid";
-    displayStatus = "Paid";
+        return new Date(a.dueDate) - new Date(b.dueDate);
+    });
 
-} else if (diffDays < 0) {
+    bills.forEach((bill) => {
 
-    cardClass = "overdue";
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-    displayStatus =
-        `Overdue by ${Math.abs(diffDays)} day${
-            Math.abs(diffDays) !== 1 ? "s" : ""
-        }`;
+        const dueDate = new Date(bill.dueDate);
 
-    overdueCount++;
+        const diffTime = dueDate - today;
 
-} else if (diffDays === 0) {
+        const diffDays = Math.ceil(
+            diffTime / (1000 * 60 * 60 * 24)
+        );
 
-    cardClass = "due";
-    displayStatus = "Due Today";
+        let cardClass = "";
+        let displayStatus = bill.status;
 
-} else if (diffDays === 1) {
-
-    cardClass = "due";
-    displayStatus = "Due Tomorrow";
-
-} else {
-
-    cardClass = "due";
-    displayStatus = `Due in ${diffDays} days`;
-
-}
-
-    
         if (bill.status === "Paid") {
-            paidCount++;
+
+            cardClass = "paid";
+            displayStatus = "Paid";
+
+        } else if (diffDays < 0) {
+
+            cardClass = "overdue";
+
+            displayStatus =
+                `Overdue by ${Math.abs(diffDays)} day${
+                    Math.abs(diffDays) !== 1 ? "s" : ""
+                }`;
+
+            overdueCount++;
+
+        } else if (diffDays === 0) {
+
+            cardClass = "due";
+            displayStatus = "Due Today";
+
+        } else if (diffDays === 1) {
+
+            cardClass = "due";
+            displayStatus = "Due Tomorrow";
+
         } else {
+
+            cardClass = "due";
+            displayStatus = `Due in ${diffDays} days`;
+
+        }
+
+        if (bill.status === "Paid") {
+
+            paidCount++;
+
+        } else {
+
             outstandingTotal += bill.amount;
+
         }
 
         billList.innerHTML += `
@@ -131,11 +165,11 @@ if (bill.status === "Paid") {
                 <p><strong>${displayStatus}</strong></p>
 
                 ${
-                  bill.status !== "Paid"
-                  ? `<button onclick="markPaid('${billDoc.id}')">
+                    bill.status !== "Paid"
+                    ? `<button onclick="markPaid('${bill.id}')">
                         Mark Paid
-                     </button>`
-                  : ""
+                      </button>`
+                    : ""
                 }
 
             </div>
