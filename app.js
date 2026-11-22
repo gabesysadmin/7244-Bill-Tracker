@@ -85,6 +85,26 @@ function showApp() {
     document.getElementById("appSection").style.display =
         "block";
 
+    if (currentUser.role !== "admin") {
+
+        form.style.display = "none";
+
+    } else {
+
+        form.style.display = "block";
+
+    }
+
+    const welcomeBanner =
+        document.getElementById("welcomeBanner");
+
+    if (welcomeBanner) {
+
+        welcomeBanner.innerText =
+            `Welcome, ${currentUser.displayname}`;
+
+    }
+
     loadBills();
 }
 
@@ -377,28 +397,34 @@ async function loadBills() {
                     </strong>
                 </p>
 
-                <div class="button-group">
+                ${
+                    currentUser.role === "admin"
+                    ? `
+                    <div class="button-group">
 
-                    ${
-                        bill.status !== "Paid"
-                        ? `
+                        ${
+                            bill.status !== "Paid"
+                            ? `
+                            <button
+                                onclick="markPaid('${bill.id}')">
+                                Mark Paid
+                            </button>
+                            `
+                            : ""
+                        }
+
                         <button
-                            onclick="markPaid('${bill.id}')">
-                            Mark Paid
+                            class="delete-btn"
+                            onclick="deleteBill('${bill.id}')">
+
+                            Delete
+
                         </button>
-                        `
-                        : ""
-                    }
 
-                    <button
-                        class="delete-btn"
-                        onclick="deleteBill('${bill.id}')">
-
-                        Delete
-
-                    </button>
-
-                </div>
+                    </div>
+                    `
+                    : ""
+                }
 
             </div>
         `;
