@@ -80,3 +80,13 @@ button {
 .paid {
     border-left: 6px solid #16a34a;
 }
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.delete-btn {
+    background: #dc2626;
+}
