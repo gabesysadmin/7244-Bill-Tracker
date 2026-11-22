@@ -176,13 +176,13 @@ async function enableNotifications() {
 
     } catch (error) {
 
-        console.error(error);
+    console.error(error);
 
-        alert(
-            "Failed to enable notifications."
-        );
+    alert(
+        "Failed: " + error.message
+    );
 
-    }
+}
 }
 
 async function login() {
