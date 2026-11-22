@@ -88,8 +88,23 @@ const db = admin.firestore();
 
         let title = null;
         let body = null;
+        const todayString =
+    today
+        .toISOString()
+        .split("T")[0];
 
-        if (diffDays === 5) {
+if (
+    bill.lastNotificationSent ===
+    todayString
+) {
+
+    continue;
+}
+
+const overdueDays =
+    Math.abs(diffDays);
+
+if (diffDays === 5) {
 
     title =
         "Bill Due In 5 Days";
@@ -98,24 +113,31 @@ const db = admin.firestore();
         `${bill.billName} ($${bill.amount}) is due in 5 days.`;
 
 }
-        else if (diffDays === 0) {
+else if (diffDays === 0) {
 
-            title =
-                "Bill Due Today";
+    title =
+        "Bill Due Today";
 
-            body =
-                `${bill.billName} ($${bill.amount}) is due today.`;
+    body =
+        `${bill.billName} ($${bill.amount}) is due today.`;
 
-        }
-        else if (diffDays < 0) {
+}
+else if (
+    diffDays < 0 &&
+    (
+        overdueDays === 7 ||
+        overdueDays === 14 ||
+        overdueDays === 30
+    )
+) {
 
-            title =
-                "Bill Overdue";
+    title =
+        "Bill Overdue";
 
-            body =
-                `${bill.billName} is overdue by ${Math.abs(diffDays)} day(s).`;
+    body =
+        `${bill.billName} is overdue by ${overdueDays} day(s).`;
 
-        }
+}
 
         if (!title) {
             continue;
@@ -135,7 +157,12 @@ const db = admin.firestore();
 
             });
 
-        sent++;
+        await billDoc.ref.update({
+    lastNotificationSent:
+        todayString
+});
+
+sent++;
     }
 
     console.log(
