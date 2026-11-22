@@ -115,7 +115,7 @@ async function loadUsers() {
 
         assignedTo.innerHTML += `
             <option value="${user.username}">
-                ${user.username}
+                ${user.displayName}
             </option>
         `;
     });
@@ -125,10 +125,18 @@ form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
+    const selectedUser =
+        assignedTo.options[
+            assignedTo.selectedIndex
+        ];
+
     const data = {
 
         assignedTo:
-            document.getElementById("assignedTo").value,
+            assignedTo.value,
+
+        displayName:
+            selectedUser.text,
 
         billName:
             document.getElementById("billName").value,
@@ -340,7 +348,9 @@ async function loadBills() {
         billList.innerHTML += `
             <div class="bill-card ${cardClass}">
 
-                <h3>${bill.assignedTo}</h3>
+                <h3>
+                    ${bill.displayName || bill.assignedTo}
+                </h3>
 
                 <p>${bill.billName}</p>
 
