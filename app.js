@@ -128,7 +128,7 @@ if (bill.status === "Paid") {
 
                 <p>Due: ${bill.dueDate}</p>
 
-                <p>Status: ${displayStatus}</p>
+                <p><strong>${displayStatus}</strong></p>
 
                 ${
                   bill.status !== "Paid"
