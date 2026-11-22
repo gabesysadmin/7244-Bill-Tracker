@@ -52,6 +52,10 @@ async function loadBills() {
 
     billList.innerHTML = "";
 
+    let outstandingTotal = 0;
+    let overdueCount = 0;
+    let paidCount = 0;
+
     const snapshot = await getDocs(
         collection(db, "bills")
     );
@@ -59,6 +63,12 @@ async function loadBills() {
     snapshot.forEach((billDoc) => {
 
         const bill = billDoc.data();
+
+        if (bill.status === "Paid") {
+            paidCount++;
+        } else {
+            outstandingTotal += bill.amount;
+        }
 
         billList.innerHTML += `
             <div class="bill-card">
@@ -84,6 +94,15 @@ async function loadBills() {
             </div>
         `;
     });
+
+    document.getElementById("outstandingTotal").textContent =
+        `$${outstandingTotal.toFixed(2)}`;
+
+    document.getElementById("overdueCount").textContent =
+        overdueCount;
+
+    document.getElementById("paidCount").textContent =
+        paidCount;
 }
 
 loadBills();
