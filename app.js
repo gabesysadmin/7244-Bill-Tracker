@@ -63,7 +63,32 @@ async function loadBills() {
     snapshot.forEach((billDoc) => {
 
         const bill = billDoc.data();
+        const today = new Date();
 
+today.setHours(0, 0, 0, 0);
+
+const dueDate = new Date(bill.dueDate);
+
+let cardClass = "";
+let displayStatus = bill.status;
+
+if (bill.status === "Paid") {
+
+    cardClass = "paid";
+
+} else if (dueDate < today) {
+
+    cardClass = "overdue";
+    displayStatus = "Overdue";
+    overdueCount++;
+
+} else {
+
+    cardClass = "due";
+
+}
+
+    
         if (bill.status === "Paid") {
             paidCount++;
         } else {
