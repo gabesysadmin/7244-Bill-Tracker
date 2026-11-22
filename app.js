@@ -96,7 +96,7 @@ if (bill.status === "Paid") {
         }
 
         billList.innerHTML += `
-            <div class="bill-card">
+            <div class="bill-card ${cardClass}">
 
                 <h3>${bill.person}</h3>
 
@@ -106,7 +106,7 @@ if (bill.status === "Paid") {
 
                 <p>Due: ${bill.dueDate}</p>
 
-                <p>Status: ${bill.status}</p>
+                <p>Status: ${displayStatus}</p>
 
                 ${
                   bill.status !== "Paid"
