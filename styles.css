@@ -99,3 +99,18 @@ button {
 .button-group button {
     min-width: 85px;
 }
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filters select {
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.dashboard {
+    flex-wrap: wrap;
+}
