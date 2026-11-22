@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>Family Bill Tracker</title>
 
     <meta name="viewport"
@@ -13,83 +15,89 @@
           href="manifest.json">
 
 </head>
+
 <body>
 
-<h1>Family Bill Tracker</h1>
-    
-<div id="loginSection">
+    <h1>Family Bill Tracker</h1>
 
-    <h2>Login</h2>
+    <div id="loginSection">
 
-    <input
-        type="text"
-        id="username"
-        placeholder="Username">
+        <h2>Login</h2>
 
-    <input
-        type="password"
-        id="password"
-        placeholder="Password">
+        <input
+            type="text"
+            id="username"
+            placeholder="Username">
 
-    <button id="loginBtn">
-        Login
-    </button>
+        <input
+            type="password"
+            id="password"
+            placeholder="Password">
 
-</div>
+        <button id="loginBtn">
+            Login
+        </button>
 
-<div class="dashboard">
-
-    <div class="stat-card">
-        <h3>Outstanding</h3>
-        <span id="outstandingTotal">$0.00</span>
     </div>
 
-    <div class="stat-card">
-        <h3>Overdue</h3>
-        <span id="overdueCount">0</span>
+    <div id="appSection" style="display:none;">
+
+        <div class="dashboard">
+
+            <div class="stat-card">
+                <h3>Outstanding</h3>
+                <span id="outstandingTotal">$0.00</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Overdue</h3>
+                <span id="overdueCount">0</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Paid</h3>
+                <span id="paidCount">0</span>
+            </div>
+
+        </div>
+
+        <form id="billForm">
+
+            <input
+                id="person"
+                placeholder="Family Member"
+                required>
+
+            <input
+                id="billName"
+                placeholder="Bill Name"
+                required>
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="Amount"
+                required>
+
+            <input
+                type="date"
+                id="dueDate"
+                required>
+
+            <button type="submit">
+                Add Bill
+            </button>
+
+        </form>
+
+        <hr>
+
+        <div id="billList"></div>
+
     </div>
 
-    <div class="stat-card">
-        <h3>Paid</h3>
-        <span id="paidCount">0</span>
-    </div>
-
-</div>
-
-<form id="billForm">
-
-    <input
-        id="person"
-        placeholder="Family Member"
-        required>
-
-    <input
-        id="billName"
-        placeholder="Bill Name"
-        required>
-
-    <input
-        type="number"
-        id="amount"
-        placeholder="Amount"
-        required>
-
-    <input
-        type="date"
-        id="dueDate"
-        required>
-
-    <button type="submit">
-        Add Bill
-    </button>
-
-</form>
-
-<hr>
-
-<div id="billList"></div>
-
-<script type="module" src="app.js"></script>
+    <script type="module" src="app.js"></script>
 
 </body>
+
 </html>
