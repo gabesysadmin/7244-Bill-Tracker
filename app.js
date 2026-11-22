@@ -48,6 +48,21 @@ async function markPaid(id) {
 
 window.markPaid = markPaid;
 
+async function deleteBill(id) {
+
+    if (!confirm("Delete this bill?")) {
+        return;
+    }
+
+    await deleteDoc(
+        doc(db, "bills", id)
+    );
+
+    loadBills();
+}
+
+window.deleteBill = deleteBill;
+
 async function loadBills() {
 
     billList.innerHTML = "";
@@ -91,6 +106,7 @@ async function loadBills() {
         if (!aOverdue && bOverdue) return 1;
 
         return new Date(a.dueDate) - new Date(b.dueDate);
+
     });
 
     bills.forEach((bill) => {
@@ -165,13 +181,22 @@ async function loadBills() {
 
                 <p><strong>${displayStatus}</strong></p>
 
-                ${
-                    bill.status !== "Paid"
-                    ? `<button onclick="markPaid('${bill.id}')">
-                        Mark Paid
-                      </button>`
-                    : ""
-                }
+                <div class="button-group">
+
+                    ${
+                        bill.status !== "Paid"
+                        ? `<button onclick="markPaid('${bill.id}')">
+                            Mark Paid
+                           </button>`
+                        : ""
+                    }
+
+                    <button class="delete-btn"
+                            onclick="deleteBill('${bill.id}')">
+                        Delete
+                    </button>
+
+                </div>
 
             </div>
         `;
