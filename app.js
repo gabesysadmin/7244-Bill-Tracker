@@ -64,10 +64,15 @@ async function loadBills() {
 
         const bill = billDoc.data();
         const today = new Date();
-
 today.setHours(0, 0, 0, 0);
 
 const dueDate = new Date(bill.dueDate);
+
+const diffTime = dueDate - today;
+
+const diffDays = Math.ceil(
+    diffTime / (1000 * 60 * 60 * 24)
+);
 
 let cardClass = "";
 let displayStatus = bill.status;
@@ -75,16 +80,33 @@ let displayStatus = bill.status;
 if (bill.status === "Paid") {
 
     cardClass = "paid";
+    displayStatus = "Paid";
 
-} else if (dueDate < today) {
+} else if (diffDays < 0) {
 
     cardClass = "overdue";
-    displayStatus = "Overdue";
+
+    displayStatus =
+        `Overdue by ${Math.abs(diffDays)} day${
+            Math.abs(diffDays) !== 1 ? "s" : ""
+        }`;
+
     overdueCount++;
+
+} else if (diffDays === 0) {
+
+    cardClass = "due";
+    displayStatus = "Due Today";
+
+} else if (diffDays === 1) {
+
+    cardClass = "due";
+    displayStatus = "Due Tomorrow";
 
 } else {
 
     cardClass = "due";
+    displayStatus = `Due in ${diffDays} days`;
 
 }
 
