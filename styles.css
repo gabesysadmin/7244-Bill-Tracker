@@ -114,3 +114,11 @@ button {
 .dashboard {
     flex-wrap: wrap;
 }
+
+textarea {
+    padding: 10px;
+    border-radius: 8px;
+    resize: vertical;
+    width: 100%;
+    box-sizing: border-box;
+}
