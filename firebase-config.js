@@ -4,7 +4,7 @@ import { getMessaging } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyD91obV5pMOt8FGeyC2_StenLM6dKpbQK",
+  apiKey: "AIzaSyD91obV5pMOt8FGeyC2_StenLM6dKpbQKQ",
   authDomain: "family-bill-tracker-465e9.firebaseapp.com",
   projectId: "family-bill-tracker-465e9",
   storageBucket: "family-bill-tracker-465e9.firebasestorage.app",
