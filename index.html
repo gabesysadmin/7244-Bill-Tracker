@@ -2,7 +2,6 @@
 <html>
 
 <head>
-
     <title>Family Bill Tracker</title>
 
     <meta name="viewport"
@@ -13,7 +12,6 @@
 
     <link rel="manifest"
           href="manifest.json">
-
 </head>
 
 <body>
@@ -64,6 +62,32 @@
                 <h3>Paid</h3>
                 <span id="paidCount">0</span>
             </div>
+
+            <div class="stat-card">
+                <h3>Due This Week</h3>
+                <span id="dueThisWeek">0</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Recurring</h3>
+                <span id="recurringCount">0</span>
+            </div>
+
+        </div>
+
+        <div class="filters">
+
+            <select id="statusFilter">
+                <option value="all">All Bills</option>
+                <option value="overdue">Overdue</option>
+                <option value="due">Due Soon</option>
+                <option value="paid">Paid</option>
+                <option value="recurring">Recurring</option>
+            </select>
+
+            <select id="personFilter">
+                <option value="all">All Family Members</option>
+            </select>
 
         </div>
 
