@@ -68,3 +68,15 @@ button {
     font-weight: bold;
     color: #2563eb;
 }
+
+.paid {
+    border-left: 6px solid #16a34a;
+}
+
+.overdue {
+    border-left: 6px solid #dc2626;
+}
+
+.due {
+    border-left: 6px solid #f59e0b;
+}
