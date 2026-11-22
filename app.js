@@ -13,15 +13,49 @@ import {
 
 let currentUser = null;
 let currentBills = [];
+let activeStatusFilter = "all";
+let activePersonFilter = "all";
 
 const form = document.getElementById("billForm");
 const billList = document.getElementById("billList");
 const assignedTo = document.getElementById("assignedTo");
 
 const loginBtn = document.getElementById("loginBtn");
+const statusFilter =
+    document.getElementById("statusFilter");
+
+const personFilter =
+    document.getElementById("personFilter");
 
 if (loginBtn) {
     loginBtn.addEventListener("click", login);
+}
+if (statusFilter) {
+
+    statusFilter.addEventListener(
+        "change",
+        () => {
+
+            activeStatusFilter =
+                statusFilter.value;
+
+            loadBills();
+        }
+    );
+}
+
+if (personFilter) {
+
+    personFilter.addEventListener(
+        "change",
+        () => {
+
+            activePersonFilter =
+                personFilter.value;
+
+            loadBills();
+        }
+    );
 }
 
 async function login() {
@@ -140,6 +174,29 @@ async function loadUsers() {
             </option>
         `;
     });
+    if (personFilter) {
+
+    personFilter.innerHTML =
+        `<option value="all">
+            All Family Members
+         </option>`;
+
+    snapshot.forEach((userDoc) => {
+
+        const user = userDoc.data();
+
+        if (user.role === "admin") {
+            return;
+        }
+
+        personFilter.innerHTML += `
+            <option value="${user.username}">
+                ${user.displayname}
+            </option>
+        `;
+    });
+}
+
 }
 
 form.addEventListener("submit", async (e) => {
@@ -315,6 +372,9 @@ async function loadBills() {
     let overdueCount = 0;
     let paidCount = 0;
 
+    let dueThisWeek = 0;
+    let recurringCount = 0;
+
     currentBills = [];
 
     const bills = currentBills;
@@ -353,6 +413,13 @@ async function loadBills() {
 
     bills.forEach((bill) => {
 
+        if (
+    activePersonFilter !== "all" &&
+    bill.assignedTo !== activePersonFilter
+) {
+    return;
+}
+
         const today = new Date();
 
         today.setHours(
@@ -369,6 +436,18 @@ async function loadBills() {
             (dueDate - today) /
             (1000 * 60 * 60 * 24)
         );
+
+        if (
+    diffDays >= 0 &&
+    diffDays <= 7 &&
+    bill.status !== "Paid"
+) {
+    dueThisWeek++;
+}
+
+if (bill.recurring) {
+    recurringCount++;
+}
 
         let cardClass = "";
         let displayStatus = bill.status;
@@ -406,6 +485,34 @@ async function loadBills() {
                 `Due in ${diffDays} days`;
 
         }
+
+        if (
+    activeStatusFilter === "paid" &&
+    bill.status !== "Paid"
+) {
+    return;
+}
+
+if (
+    activeStatusFilter === "recurring" &&
+    !bill.recurring
+) {
+    return;
+}
+
+if (
+    activeStatusFilter === "overdue" &&
+    diffDays >= 0
+) {
+    return;
+}
+
+if (
+    activeStatusFilter === "due" &&
+    (diffDays < 0 || bill.status === "Paid")
+) {
+    return;
+}
 
         if (bill.status === "Paid") {
 
@@ -488,6 +595,16 @@ async function loadBills() {
         "paidCount"
     ).textContent =
         paidCount;
+
+    document.getElementById(
+    "dueThisWeek"
+).textContent =
+    dueThisWeek;
+
+document.getElementById(
+    "recurringCount"
+).textContent =
+    recurringCount;
 }
 
 const savedUser =
