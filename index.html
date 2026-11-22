@@ -148,7 +148,62 @@
         <div id="billList"></div>
 
     </div>
+<div id="editModal" class="modal">
 
+    <div class="modal-content">
+
+        <h2>Edit Bill</h2>
+
+        <input
+            type="hidden"
+            id="editBillId">
+
+        <input
+            id="editBillName"
+            placeholder="Bill Name">
+
+        <input
+            type="number"
+            id="editAmount"
+            placeholder="Amount"
+            step="0.01">
+
+        <input
+            type="date"
+            id="editDueDate">
+
+        <textarea
+            id="editNotes"
+            placeholder="Notes"
+            rows="4"></textarea>
+
+        <label>
+            <input
+                type="checkbox"
+                id="editRecurring">
+
+            Recurring Monthly
+        </label>
+
+        <div class="modal-buttons">
+
+            <button id="saveEditBtn">
+                Save Changes
+            </button>
+
+            <button
+                id="cancelEditBtn"
+                class="delete-btn">
+
+                Cancel
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
     <script type="module" src="app.js"></script>
 
 </body>
