@@ -6,11 +6,82 @@ import {
     getDocs,
     updateDoc,
     deleteDoc,
+    query,
+    where,
     doc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+let currentUser = null;
+
 const form = document.getElementById("billForm");
 const billList = document.getElementById("billList");
+
+const loginBtn = document.getElementById("loginBtn");
+
+if (loginBtn) {
+    loginBtn.addEventListener("click", login);
+}
+
+async function login() {
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value.trim();
+
+    const q = query(
+        collection(db, "users"),
+        where("username", "==", username),
+        where("password", "==", password)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+
+        alert("Invalid username or password");
+
+        return;
+    }
+
+    snapshot.forEach((userDoc) => {
+        currentUser = userDoc.data();
+    });
+
+    localStorage.setItem(
+        "currentUser",
+        JSON.stringify(currentUser)
+    );
+
+    showApp();
+}
+
+function logout() {
+
+    localStorage.removeItem("currentUser");
+
+    currentUser = null;
+
+    document.getElementById("loginSection").style.display =
+        "block";
+
+    document.getElementById("appSection").style.display =
+        "none";
+}
+
+window.logout = logout;
+
+function showApp() {
+
+    document.getElementById("loginSection").style.display =
+        "none";
+
+    document.getElementById("appSection").style.display =
+        "block";
+
+    loadBills();
+}
 
 form.addEventListener("submit", async (e) => {
 
@@ -71,9 +142,8 @@ async function loadBills() {
     let overdueCount = 0;
     let paidCount = 0;
 
-    const snapshot = await getDocs(
-        collection(db, "bills")
-    );
+    const snapshot =
+        await getDocs(collection(db, "bills"));
 
     const bills = [];
 
@@ -105,21 +175,21 @@ async function loadBills() {
         if (aOverdue && !bOverdue) return -1;
         if (!aOverdue && bOverdue) return 1;
 
-        return new Date(a.dueDate) - new Date(b.dueDate);
-
+        return new Date(a.dueDate) -
+               new Date(b.dueDate);
     });
 
     bills.forEach((bill) => {
 
         const today = new Date();
+
         today.setHours(0, 0, 0, 0);
 
         const dueDate = new Date(bill.dueDate);
 
-        const diffTime = dueDate - today;
-
         const diffDays = Math.ceil(
-            diffTime / (1000 * 60 * 60 * 24)
+            (dueDate - today) /
+            (1000 * 60 * 60 * 24)
         );
 
         let cardClass = "";
@@ -136,7 +206,9 @@ async function loadBills() {
 
             displayStatus =
                 `Overdue by ${Math.abs(diffDays)} day${
-                    Math.abs(diffDays) !== 1 ? "s" : ""
+                    Math.abs(diffDays) !== 1
+                        ? "s"
+                        : ""
                 }`;
 
             overdueCount++;
@@ -154,8 +226,8 @@ async function loadBills() {
         } else {
 
             cardClass = "due";
-            displayStatus = `Due in ${diffDays} days`;
-
+            displayStatus =
+                `Due in ${diffDays} days`;
         }
 
         if (bill.status === "Paid") {
@@ -165,7 +237,6 @@ async function loadBills() {
         } else {
 
             outstandingTotal += bill.amount;
-
         }
 
         billList.innerHTML += `
@@ -212,4 +283,13 @@ async function loadBills() {
         paidCount;
 }
 
-loadBills();
+const savedUser =
+    localStorage.getItem("currentUser");
+
+if (savedUser) {
+
+    currentUser =
+        JSON.parse(savedUser);
+
+    showApp();
+}
