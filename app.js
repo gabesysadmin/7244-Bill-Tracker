@@ -1,4 +1,7 @@
-import { db } from "./firebase-config.js";
+import {
+    db,
+    messaging
+} from "./firebase-config.js";
 
 import {
     collection,
@@ -10,6 +13,9 @@ import {
     where,
     doc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+    getToken
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
 let currentUser = null;
 let currentBills = [];
@@ -29,6 +35,10 @@ const personFilter =
     document.getElementById("personFilter");
 const toggleArchivedBtn =
     document.getElementById("toggleArchivedBtn");
+const enableNotificationsBtn =
+    document.getElementById(
+        "enableNotificationsBtn"
+    );
 
 if (loginBtn) {
     loginBtn.addEventListener("click", login);
@@ -77,6 +87,102 @@ if (toggleArchivedBtn) {
             loadBills();
         }
     );
+}
+
+if (enableNotificationsBtn) {
+
+    enableNotificationsBtn
+        .addEventListener(
+            "click",
+            enableNotifications
+        );
+}
+
+async function enableNotifications() {
+
+    try {
+
+        const permission =
+            await Notification.requestPermission();
+
+        if (
+            permission !== "granted"
+        ) {
+
+            alert(
+                "Notification permission denied."
+            );
+
+            return;
+        }
+
+        const token =
+            await getToken(
+                messaging,
+                {
+                    vapidKey:
+                        "BLvLnNDzFXIRUgNg5Fb3xhzImxyBur_99fP68OujA4Y_eUl14UCuKx1ThUlGSxZsWC5x_hLxnrhlJdhibIRpJLI"
+                }
+            );
+
+        if (!token) {
+
+            alert(
+                "Could not get notification token."
+            );
+
+            return;
+        }
+
+        const usersSnapshot =
+            await getDocs(
+                query(
+                    collection(
+                        db,
+                        "users"
+                    ),
+                    where(
+                        "username",
+                        "==",
+                        currentUser.username
+                    )
+                )
+            );
+
+        for (
+            const userDoc
+            of usersSnapshot.docs
+        ) {
+
+            await updateDoc(
+                doc(
+                    db,
+                    "users",
+                    userDoc.id
+                ),
+                {
+                    notificationsEnabled:
+                        true,
+
+                    fcmToken:
+                        token
+                }
+            );
+        }
+
+        alert(
+            "Notifications Enabled"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Failed to enable notifications."
+        );
+
+    }
 }
 
 async function login() {
