@@ -221,10 +221,23 @@ async function loadBills() {
 
     snapshot.forEach((billDoc) => {
 
-        bills.push({
+        const bill = {
             id: billDoc.id,
             ...billDoc.data()
-        });
+        };
+
+        if (currentUser.role === "admin") {
+
+            bills.push(bill);
+
+        } else if (
+            bill.assignedTo ===
+            currentUser.username
+        ) {
+
+            bills.push(bill);
+
+        }
 
     });
 
