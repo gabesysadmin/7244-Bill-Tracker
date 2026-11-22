@@ -440,30 +440,35 @@ async function loadBills() {
                 </p>
 
                 ${
-                    currentUser.role === "admin"
-                    ? `
-                    <div class="button-group">
+    currentUser.role === "admin"
+    ? `
+    <div class="button-group">
 
-                        ${
-                            bill.status !== "Paid"
-                            ? `
-                            <button onclick="markPaid('${bill.id}')">
-                                Mark Paid
-                            </button>
-                            `
-                            : ""
-                        }
+        <button
+            onclick="editBill('${bill.id}')">
+            Edit
+        </button>
 
-                        <button
-                            class="delete-btn"
-                            onclick="deleteBill('${bill.id}')">
-                            Delete
-                        </button>
+        ${
+            bill.status !== "Paid"
+            ? `
+            <button onclick="markPaid('${bill.id}')">
+                Mark Paid
+            </button>
+            `
+            : ""
+        }
 
-                    </div>
-                    `
-                    : ""
-                }
+        <button
+            class="delete-btn"
+            onclick="deleteBill('${bill.id}')">
+            Delete
+        </button>
+
+    </div>
+    `
+    : ""
+}
 
             </div>
         `;
