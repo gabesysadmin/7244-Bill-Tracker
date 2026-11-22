@@ -95,3 +95,7 @@ button {
     margin-bottom: 15px;
     color: #2563eb;
 }
+
+.button-group button {
+    min-width: 85px;
+}
