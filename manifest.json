@@ -1,0 +1,8 @@
+{
+  "name": "Family Bill Tracker",
+  "short_name": "Bills",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff"
+}
