@@ -12,6 +12,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 let currentUser = null;
+let currentBills = [];
 
 const form = document.getElementById("billForm");
 const billList = document.getElementById("billList");
@@ -169,6 +170,9 @@ form.addEventListener("submit", async (e) => {
         dueDate:
             document.getElementById("dueDate").value,
 
+        recurring:
+            document.getElementById("recurring").checked,
+
         status: "Due"
 
     };
@@ -185,11 +189,12 @@ form.addEventListener("submit", async (e) => {
 
 async function markPaid(id) {
 
-    const billRef = doc(
-        db,
-        "bills",
-        id
+    const bill = currentBills.find(
+        b => b.id === id
     );
+
+    const billRef =
+        doc(db, "bills", id);
 
     await updateDoc(
         billRef,
@@ -199,6 +204,45 @@ async function markPaid(id) {
                 new Date().toISOString()
         }
     );
+
+    if (
+        bill &&
+        bill.recurring === true
+    ) {
+
+        const nextDate =
+            new Date(bill.dueDate);
+
+        nextDate.setMonth(
+            nextDate.getMonth() + 1
+        );
+
+        await addDoc(
+            collection(db, "bills"),
+            {
+                assignedTo:
+                    bill.assignedTo,
+
+                displayname:
+                    bill.displayname,
+
+                billName:
+                    bill.billName,
+
+                amount:
+                    bill.amount,
+
+                dueDate:
+                    nextDate
+                        .toISOString()
+                        .split("T")[0],
+
+                recurring: true,
+
+                status: "Due"
+            }
+        );
+    }
 
     loadBills();
 }
@@ -212,11 +256,7 @@ async function deleteBill(id) {
     }
 
     await deleteDoc(
-        doc(
-            db,
-            "bills",
-            id
-        )
+        doc(db, "bills", id)
     );
 
     loadBills();
@@ -232,12 +272,14 @@ async function loadBills() {
     let overdueCount = 0;
     let paidCount = 0;
 
+    currentBills = [];
+
+    const bills = currentBills;
+
     const snapshot =
         await getDocs(
             collection(db, "bills")
         );
-
-    const bills = [];
 
     snapshot.forEach((billDoc) => {
 
@@ -261,36 +303,10 @@ async function loadBills() {
 
     });
 
-    bills.sort((a, b) => {
-
-        const today = new Date();
-
-        const aPaid =
-            a.status === "Paid";
-
-        const bPaid =
-            b.status === "Paid";
-
-        if (aPaid && !bPaid) return 1;
-        if (!aPaid && bPaid) return -1;
-
-        const aOverdue =
-            new Date(a.dueDate) < today &&
-            !aPaid;
-
-        const bOverdue =
-            new Date(b.dueDate) < today &&
-            !bPaid;
-
-        if (aOverdue && !bOverdue) return -1;
-        if (!aOverdue && bOverdue) return 1;
-
-        return (
-            new Date(a.dueDate) -
-            new Date(b.dueDate)
-        );
-
-    });
+    bills.sort((a, b) =>
+        new Date(a.dueDate) -
+        new Date(b.dueDate)
+    );
 
     bills.forEach((bill) => {
 
@@ -312,69 +328,49 @@ async function loadBills() {
         );
 
         let cardClass = "";
-        let displayStatus =
-            bill.status;
+        let displayStatus = bill.status;
 
-        if (
-            bill.status === "Paid"
-        ) {
+        if (bill.status === "Paid") {
 
             cardClass = "paid";
-
             displayStatus = "Paid";
 
-        } else if (
-            diffDays < 0
-        ) {
+        } else if (diffDays < 0) {
 
             cardClass = "overdue";
 
             displayStatus =
                 `Overdue by ${Math.abs(diffDays)} day${
-                    Math.abs(diffDays) !== 1
-                        ? "s"
-                        : ""
+                    Math.abs(diffDays) !== 1 ? "s" : ""
                 }`;
 
             overdueCount++;
 
-        } else if (
-            diffDays === 0
-        ) {
+        } else if (diffDays === 0) {
 
             cardClass = "due";
+            displayStatus = "Due Today";
 
-            displayStatus =
-                "Due Today";
-
-        } else if (
-            diffDays === 1
-        ) {
+        } else if (diffDays === 1) {
 
             cardClass = "due";
-
-            displayStatus =
-                "Due Tomorrow";
+            displayStatus = "Due Tomorrow";
 
         } else {
 
             cardClass = "due";
-
             displayStatus =
                 `Due in ${diffDays} days`;
 
         }
 
-        if (
-            bill.status === "Paid"
-        ) {
+        if (bill.status === "Paid") {
 
             paidCount++;
 
         } else {
 
-            outstandingTotal +=
-                bill.amount;
+            outstandingTotal += bill.amount;
 
         }
 
@@ -385,7 +381,10 @@ async function loadBills() {
                     ${bill.displayname || bill.assignedTo}
                 </h3>
 
-                <p>${bill.billName}</p>
+                <p>
+                    ${bill.billName}
+                    ${bill.recurring ? " 🔄" : ""}
+                </p>
 
                 <p>$${bill.amount.toFixed(2)}</p>
 
@@ -405,8 +404,7 @@ async function loadBills() {
                         ${
                             bill.status !== "Paid"
                             ? `
-                            <button
-                                onclick="markPaid('${bill.id}')">
+                            <button onclick="markPaid('${bill.id}')">
                                 Mark Paid
                             </button>
                             `
@@ -416,9 +414,7 @@ async function loadBills() {
                         <button
                             class="delete-btn"
                             onclick="deleteBill('${bill.id}')">
-
                             Delete
-
                         </button>
 
                     </div>
