@@ -11,7 +11,8 @@ import {
     deleteDoc,
     query,
     where,
-    doc
+    doc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import {
     getToken
@@ -218,12 +219,23 @@ async function login() {
         return;
     }
 
-    snapshot.forEach((userDoc) => {
+    let userDocId = null;
 
-        currentUser = userDoc.data();
+snapshot.forEach((userDoc) => {
+    userDocId = userDoc.id;
 
-    });
+    currentUser = {
+        ...userDoc.data(),
+        previousLogin: userDoc.data().lastLogin || null
+    };
+});
 
+await updateDoc(
+    doc(db, "users", userDocId),
+    {
+        lastLogin: serverTimestamp()
+    }
+);
     localStorage.setItem(
         "currentUser",
         JSON.stringify(currentUser)
@@ -271,15 +283,45 @@ function showApp() {
     }
 }
 
-    const welcomeBanner =
-        document.getElementById("welcomeBanner");
+    const welcomeMessage =
+    document.getElementById("welcomeMessage");
 
-    if (welcomeBanner) {
+if (welcomeMessage) {
+    welcomeMessage.innerText =
+        `Welcome, ${currentUser.displayname}`;
+}
 
-        welcomeBanner.innerText =
-            `Welcome, ${currentUser.displayname}`;
+const lastLoginInfo =
+    document.getElementById("lastLoginInfo");
+
+if (lastLoginInfo) {
+
+    if (currentUser.previousLogin) {
+
+        let loginDate;
+
+        if (
+            typeof currentUser.previousLogin.seconds === "number"
+        ) {
+            loginDate = new Date(
+                currentUser.previousLogin.seconds * 1000
+            );
+        } else {
+            loginDate = new Date(
+                currentUser.previousLogin
+            );
+        }
+
+        lastLoginInfo.innerText =
+            `Last login: ${loginDate.toLocaleString()}`;
+
+    } else {
+
+        lastLoginInfo.innerText =
+            "First login";
 
     }
+}
 
     loadBills();
 }
