@@ -58,7 +58,7 @@ h3 {
     margin-top: 0;
 }
 
-/* Welcome Banner */
+/* Welcome */
 
 #welcomeBanner {
 
@@ -67,17 +67,28 @@ h3 {
     margin-bottom: 20px;
 }
 
-/* Top Buttons */
+/* Top Toolbar */
 
-#appSection > button {
+.top-toolbar {
 
-    margin-right: 10px;
-}
+    display: flex;
 
-.dashboard {
+    gap: 12px;
 
-    margin-top: 35px;
-    margin-bottom: 25px;
+    flex-wrap: wrap;
+
+    margin-bottom: 35px;
+
+    padding: 16px;
+
+    background: var(--card);
+
+    border-radius: 18px;
+
+    border: 1px solid rgba(250,204,21,.25);
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.25);
 }
 
 /* Dashboard */
@@ -93,6 +104,8 @@ h3 {
         );
 
     gap: 12px;
+
+    margin-bottom: 25px;
 }
 
 .stat-card {
@@ -140,7 +153,7 @@ h3 {
     margin-bottom: 25px;
 }
 
-/* Forms */
+/* Form */
 
 form {
 
@@ -184,15 +197,15 @@ form {
 
     color: var(--muted);
 
-    font-size: .9rem;
+    font-size: .95rem;
 
     display: block;
 
-    margin-top: 10px;
+    margin-top: 8px;
 
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /* Inputs */
@@ -233,6 +246,36 @@ select:focus {
 
     box-shadow:
         0 0 0 3px rgba(250,204,21,.15);
+}
+
+/* Recurring */
+
+.recurring-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+.recurring-row input[type="checkbox"] {
+
+    width: 18px;
+    height: 18px;
+
+    margin: 0;
+}
+
+.recurring-row label {
+
+    cursor: pointer;
+
+    margin: 0;
+
+    color: white;
 }
 
 /* Buttons */
@@ -293,34 +336,6 @@ button:hover {
     color: white;
 }
 
-/* Recurring Monthly */
-
-.recurring-row {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-}
-
-.recurring-row input[type="checkbox"] {
-
-    width: 18px;
-    height: 18px;
-
-    margin: 0;
-}
-
-.recurring-row label {
-
-    margin: 0;
-
-    color: white;
-
-    cursor: pointer;
-}
-
 /* Bill Cards */
 
 .bill-card {
@@ -374,7 +389,7 @@ button:hover {
     min-width: 90px;
 }
 
-/* Status Colors */
+/* Status */
 
 .due {
 
@@ -480,12 +495,14 @@ hr {
         font-size: 1.6rem;
     }
 
-    #appSection > button {
+    .top-toolbar {
+
+        flex-direction: column;
+    }
+
+    .top-toolbar button {
 
         width: 100%;
-
-        margin-right: 0;
-        margin-bottom: 12px;
     }
 
     .dashboard {
