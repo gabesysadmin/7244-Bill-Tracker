@@ -193,6 +193,29 @@ h3 {
     font-weight: 700;
 }
 
+#splashScreen {
+    position: fixed;
+    inset: 0;
+    background: #0f0f0f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.splash-logo {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 20px;
+}
+
+#splashScreen h1 {
+    color: #facc15;
+    font-size: 2rem;
+    margin: 0;
+}
+
 /* Filters */
 
 .filters {
