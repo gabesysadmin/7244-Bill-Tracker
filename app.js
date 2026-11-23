@@ -395,6 +395,51 @@ async function loadUsers() {
 
 }
 
+async function loadUserActivity() {
+
+    const tbody =
+        document.getElementById("activityTableBody");
+
+    if (!tbody) {
+        return;
+    }
+
+    tbody.innerHTML = "";
+
+    const snapshot =
+        await getDocs(collection(db, "users"));
+
+    snapshot.forEach((userDoc) => {
+
+        const user = userDoc.data();
+
+        let lastLogin = "Never";
+        let daysAgo = "-";
+
+        if (user.lastLogin) {
+
+            const loginDate =
+                user.lastLogin.toDate();
+
+            lastLogin =
+                loginDate.toLocaleString();
+
+            daysAgo = Math.floor(
+                (Date.now() - loginDate.getTime()) /
+                86400000
+            );
+        }
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${user.displayname}</td>
+                <td>${lastLogin}</td>
+                <td>${daysAgo}</td>
+            </tr>
+        `;
+    });
+}
+
 form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
@@ -985,15 +1030,17 @@ function setupTabs() {
 
     });
 
-    activityTab.addEventListener("click", () => {
+    activityTab.addEventListener("click", async () => {
 
-        billForm.style.display = "none";
-        billList.style.display = "none";
-        activitySection.style.display = "block";
+    billForm.style.display = "none";
+    billList.style.display = "none";
+    activitySection.style.display = "block";
 
-        activityTab.classList.add("active");
-        homeTab.classList.remove("active");
+    activityTab.classList.add("active");
+    homeTab.classList.remove("active");
 
-    });
+    await loadUserActivity();
+
+});
 
 }
