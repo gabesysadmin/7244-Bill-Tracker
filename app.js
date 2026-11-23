@@ -118,8 +118,8 @@ async function enableNotifications() {
 
         const registration =
     await navigator.serviceWorker.register(
-        "/family-bill-tracker/firebase-messaging-sw.js"
-    );
+    "/7244-Bill-Tracker/firebase-messaging-sw.js"
+);
 
 await navigator.serviceWorker.ready;
 
