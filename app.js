@@ -908,9 +908,15 @@ if (
                 </h3>
 
                 <p>
-                    ${bill.billName}
-                    ${bill.recurring ? " 🔄" : ""}
-                </p>
+    ${
+        diffDays < 0 && bill.status !== "Paid"
+        ? `<span class="overdue-badge">OVERDUE</span><br>`
+        : ""
+    }
+
+    ${bill.billName}
+    ${bill.recurring ? " 🔄" : ""}
+</p>
 
                 <p>$${bill.amount.toFixed(2)}</p>
 
