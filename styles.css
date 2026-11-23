@@ -67,6 +67,24 @@ h3 {
     margin-bottom: 20px;
 }
 
+.activity-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.activity-table th,
+.activity-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+.activity-table th {
+    background: #1f1f1f;
+    color: #facc15;
+}
+
 .admin-tabs {
     display: flex;
     gap: 10px;
