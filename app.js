@@ -335,8 +335,8 @@ if (lastLoginInfo) {
 
     }
 }
-
     loadBills();
+    setupTabs();
 }
 
 async function loadUsers() {
@@ -951,4 +951,49 @@ if (savedUser) {
     showApp();
 
     loadUsers();
+}
+
+function setupTabs() {
+
+    const homeTab =
+        document.getElementById("homeTab");
+
+    const activityTab =
+        document.getElementById("activityTab");
+
+    const billForm =
+        document.getElementById("billForm");
+
+    const billList =
+        document.getElementById("billList");
+
+    const activitySection =
+        document.getElementById("activitySection");
+
+    if (!homeTab || !activityTab) {
+        return;
+    }
+
+    homeTab.addEventListener("click", () => {
+
+        billForm.style.display = "";
+        billList.style.display = "";
+        activitySection.style.display = "none";
+
+        homeTab.classList.add("active");
+        activityTab.classList.remove("active");
+
+    });
+
+    activityTab.addEventListener("click", () => {
+
+        billForm.style.display = "none";
+        billList.style.display = "none";
+        activitySection.style.display = "block";
+
+        activityTab.classList.add("active");
+        homeTab.classList.remove("active");
+
+    });
+
 }
