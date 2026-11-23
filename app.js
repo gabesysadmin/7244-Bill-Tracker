@@ -431,6 +431,15 @@ async function loadUserActivity() {
             );
         }
 
+        let lastReminder = "Never";
+
+if (user.lastReminderSent) {
+    lastReminder =
+        user.lastReminderSent
+            .toDate()
+            .toLocaleString();
+}
+
         tbody.innerHTML += `
     <tr>
         <td>${user.displayname}</td>
@@ -442,6 +451,7 @@ async function loadUserActivity() {
                     ? "✅ Enabled"
                     : "❌ Disabled"
             }
+            <td>${lastReminder}</td>
         </td>
     </tr>
 `;
