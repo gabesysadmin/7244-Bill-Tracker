@@ -283,6 +283,19 @@ function showApp() {
     }
 }
 
+    const adminTabs =
+    document.getElementById("adminTabs");
+
+if (adminTabs) {
+
+    if (currentUser.role !== "admin") {
+        adminTabs.style.display = "none";
+    } else {
+        adminTabs.style.display = "flex";
+    }
+
+}
+
     const welcomeMessage =
     document.getElementById("welcomeMessage");
 
