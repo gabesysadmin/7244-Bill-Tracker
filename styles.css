@@ -396,4 +396,113 @@ hr {
 
         width: 100%;
     }
+    /* Top action buttons */
+
+#appSection > button {
+
+    margin-right: 10px;
+}
+
+#welcomeBanner {
+
+    margin-bottom: 20px;
+}
+
+/* Space before dashboard */
+
+.dashboard {
+
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+/* Better bill form */
+
+.form-header {
+
+    margin-bottom: 10px;
+}
+
+.form-header h3 {
+
+    color: var(--yellow);
+
+    margin: 0;
+}
+
+.field-label {
+
+    color: var(--muted);
+
+    font-size: .9rem;
+
+    margin-bottom: -5px;
+}
+
+/* Better recurring checkbox */
+
+.recurring-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+.recurring-row input[type="checkbox"] {
+
+    width: 18px;
+    height: 18px;
+
+    margin: 0;
+}
+
+.recurring-row label {
+
+    margin: 0;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+/* Better Add Bill button */
+
+.add-bill-btn {
+
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 16px;
+
+    font-size: 16px;
+
+    font-weight: 700;
+}
+
+/* Mobile tweaks */
+
+@media (max-width: 768px) {
+
+    #appSection > button {
+
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .filters {
+
+        flex-direction: column;
+    }
+
+    .filters select,
+    .filters button {
+
+        width: 100%;
+    }
+}
 }
