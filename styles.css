@@ -204,6 +204,10 @@ h3 {
     z-index: 9999;
 }
 
+#splashScreen {
+    transition: opacity 0.5s ease;
+}
+
 .splash-logo {
     width: 140px;
     height: 140px;
