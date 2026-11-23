@@ -206,6 +206,13 @@ form {
     letter-spacing: .3px;
 }
 
+#lastLoginInfo {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: -8px;
+    margin-bottom: 20px;
+}
+
 /* Inputs */
 
 input,
