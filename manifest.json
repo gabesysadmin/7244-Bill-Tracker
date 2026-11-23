@@ -2,7 +2,8 @@
   "name": "7244 Statesman Blvd - Bill Tracker",
   "short_name": "Bill Tracker",
   "display": "standalone",
-  "start_url": "/",
+  "start_url": "/7244-Bill_tracker",
+  "scope": "/7244-Bill-Tracker/",
   "theme_color": "#2563eb",
   "background_color": "#ffffff"
 }
