@@ -1105,7 +1105,11 @@ function setupTabs() {
 
         setTimeout(() => {
 
-            splash.style.display = "none";
+            splash.style.opacity = "0";
+
+setTimeout(() => {
+    splash.style.display = "none";
+}, 500);
 
         }, 2000);
 
