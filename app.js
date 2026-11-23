@@ -1094,27 +1094,17 @@ function setupTabs() {
 
 });
 
-    window.addEventListener("load", () => {
-
     const splash =
-        document.getElementById(
-            "splashScreen"
-        );
+    document.getElementById("splashScreen");
 
-    if (splash) {
+if (splash) {
 
-        setTimeout(() => {
+    setTimeout(() => {
 
-            splash.style.opacity = "0";
+        splash.style.display = "none";
 
-setTimeout(() => {
-    splash.style.display = "none";
-}, 500);
+    }, 2000);
 
-        }, 2000);
-
-    }
-
-});
+}
 
 }
