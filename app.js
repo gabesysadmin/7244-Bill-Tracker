@@ -258,14 +258,18 @@ function showApp() {
         "block";
 
     if (currentUser.role !== "admin") {
+    form.style.display = "none";
 
-        form.style.display = "none";
-
-    } else {
-
-        form.style.display = "block";
-
+    if (personFilter) {
+        personFilter.style.display = "none";
     }
+} else {
+    form.style.display = "block";
+
+    if (personFilter) {
+        personFilter.style.display = "inline-block";
+    }
+}
 
     const welcomeBanner =
         document.getElementById("welcomeBanner");
