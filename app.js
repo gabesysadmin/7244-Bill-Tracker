@@ -41,8 +41,21 @@ const enableNotificationsBtn =
         "enableNotificationsBtn"
     );
 
-if (loginBtn) {
-    loginBtn.addEventListener("click", login);
+const loginForm =
+    document.getElementById("loginForm");
+
+if (loginForm) {
+
+    loginForm.addEventListener(
+        "submit",
+        async (e) => {
+
+            e.preventDefault();
+
+            await login();
+
+        }
+    );
 }
 if (statusFilter) {
 
