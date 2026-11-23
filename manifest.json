@@ -1,6 +1,6 @@
 {
-  "name": "Family Bill Tracker",
-  "short_name": "Bills",
+  "name": "7244 Statesman Blvd - Bill Tracker",
+  "short_name": "Bill Tracker",
   "display": "standalone",
   "start_url": "/",
   "theme_color": "#2563eb",
