@@ -144,23 +144,36 @@ else if (
         }
 
         await admin
-            .messaging()
-            .send({
+    .messaging()
+    .send({
 
-                token:
-                    user.fcmToken,
+        token:
+            user.fcmToken,
 
-                notification: {
-                    title,
-                    body
-                }
+        notification: {
+            title,
+            body
+        }
 
-            });
+    });
 
-        await billDoc.ref.update({
+await billDoc.ref.update({
     lastNotificationSent:
         todayString
 });
+
+const userQuery = await db
+    .collection("users")
+    .where("username", "==", user.username)
+    .limit(1)
+    .get();
+
+if (!userQuery.empty) {
+    await userQuery.docs[0].ref.update({
+        lastReminderSent:
+            admin.firestore.FieldValue.serverTimestamp()
+    });
+}
 
 sent++;
     }
