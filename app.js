@@ -431,12 +431,19 @@ async function loadUserActivity() {
         }
 
         tbody.innerHTML += `
-            <tr>
-                <td>${user.displayname}</td>
-                <td>${lastLogin}</td>
-                <td>${daysAgo}</td>
-            </tr>
-        `;
+    <tr>
+        <td>${user.displayname}</td>
+        <td>${lastLogin}</td>
+        <td>${daysAgo}</td>
+        <td>
+            ${
+                user.notificationsEnabled
+                    ? "✅ Enabled"
+                    : "❌ Disabled"
+            }
+        </td>
+    </tr>
+`;
     });
 }
 
