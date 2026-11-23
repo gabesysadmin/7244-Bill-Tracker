@@ -337,6 +337,13 @@ if (lastLoginInfo) {
 }
     loadBills();
     setupTabs();
+
+const addBillSection =
+    document.getElementById("addBillSection");
+
+if (addBillSection) {
+    addBillSection.style.display = "none";
+}
 }
 
 async function loadUsers() {
@@ -446,13 +453,13 @@ if (user.lastReminderSent) {
         <td>${lastLogin}</td>
         <td>${daysAgo}</td>
         <td>
-            ${
-                user.notificationsEnabled
-                    ? "✅ Enabled"
-                    : "❌ Disabled"
-            }
-            <td>${lastReminder}</td>
-        </td>
+    ${
+        user.notificationsEnabled
+            ? "✅ Enabled"
+            : "❌ Disabled"
+    }
+</td>
+<td>${lastReminder}</td>
     </tr>
 `;
     });
@@ -1030,8 +1037,14 @@ function setupTabs() {
     const activityTab =
         document.getElementById("activityTab");
 
+    const addBillTab =
+    document.getElementById("addBillTab");
+
     const billForm =
         document.getElementById("billForm");
+
+    const addBillSection =
+    document.getElementById("addBillSection");
 
     const billList =
         document.getElementById("billList");
@@ -1045,23 +1058,37 @@ function setupTabs() {
 
     homeTab.addEventListener("click", () => {
 
-        billForm.style.display = "";
-        billList.style.display = "";
-        activitySection.style.display = "none";
+    addBillSection.style.display = "none";
+    billList.style.display = "";
+    activitySection.style.display = "none";
 
-        homeTab.classList.add("active");
-        activityTab.classList.remove("active");
+    homeTab.classList.add("active");
+    addBillTab.classList.remove("active");
+    activityTab.classList.remove("active");
 
-    });
+});
+
+    addBillTab.addEventListener("click", () => {
+
+    addBillSection.style.display = "block";
+    billList.style.display = "none";
+    activitySection.style.display = "none";
+
+    addBillTab.classList.add("active");
+    homeTab.classList.remove("active");
+    activityTab.classList.remove("active");
+
+});
 
     activityTab.addEventListener("click", async () => {
 
-    billForm.style.display = "none";
+    addBillSection.style.display = "none";
     billList.style.display = "none";
     activitySection.style.display = "block";
 
     activityTab.classList.add("active");
     homeTab.classList.remove("active");
+    addBillTab.classList.remove("active");
 
     await loadUserActivity();
 
