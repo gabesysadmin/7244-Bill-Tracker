@@ -359,6 +359,7 @@ async function loadUsers() {
     snapshot.forEach((userDoc) => {
 
         const user = userDoc.data();
+        console.log(user.displayname, user);
 
         if (user.role === "admin") {
             return;
