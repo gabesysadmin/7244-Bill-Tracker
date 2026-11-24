@@ -28,6 +28,7 @@ messaging.onBackgroundMessage(
             {
                 body:
                     payload.notification.body
+                    silent: false
             }
         );
 
