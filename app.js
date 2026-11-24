@@ -609,7 +609,8 @@ async function postMessage() {
         postedBy:
             currentUser.displayname,
         postedDate:
-            serverTimestamp()
+            serverTimestamp(),
+        notificationSent: false
     }
 );
 
