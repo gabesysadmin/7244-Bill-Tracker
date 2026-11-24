@@ -525,10 +525,22 @@ async function loadMessages() {
         messages.push(doc.data());
     });
 
-    messages.sort((a, b) =>
+    messages.sort((a, b) => {
+
+    if (a.pinned && !b.pinned) {
+        return -1;
+    }
+
+    if (!a.pinned && b.pinned) {
+        return 1;
+    }
+
+    return (
         (b.postedDate?.seconds || 0) -
         (a.postedDate?.seconds || 0)
     );
+
+});
 
     messages.forEach((message) => {
 
@@ -542,7 +554,10 @@ async function loadMessages() {
         messageList.innerHTML += `
             <div class="message-card">
 
-                <h3>${message.title}</h3>
+                <h3>
+    ${message.pinned ? "📌 " : ""}
+    ${message.title}
+</h3>
 
                 <div class="message-date">
     Posted by ${message.postedBy}
@@ -583,16 +598,20 @@ async function postMessage() {
     }
 
     await addDoc(
-        collection(db, "messages"),
-        {
-            title,
-            message,
-            postedBy:
-                currentUser.displayname,
-            postedDate:
-                serverTimestamp()
-        }
-    );
+    collection(db, "messages"),
+    {
+        title,
+        message,
+        pinned:
+            document.getElementById(
+                "pinMessage"
+            ).checked,
+        postedBy:
+            currentUser.displayname,
+        postedDate:
+            serverTimestamp()
+    }
+);
 
     document.getElementById(
         "messageTitle"
