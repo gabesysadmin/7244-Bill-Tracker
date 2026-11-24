@@ -231,20 +231,27 @@
 
     <div id="messageForm">
 
+    <input
+        id="messageTitle"
+        placeholder="Message Title">
+
+    <textarea
+        id="messageBody"
+        placeholder="Type your message here..."
+        rows="5"></textarea>
+
+    <label>
         <input
-            id="messageTitle"
-            placeholder="Message Title">
+            type="checkbox"
+            id="pinMessage">
+        Pin Message
+    </label>
 
-        <textarea
-            id="messageBody"
-            placeholder="Type your message here..."
-            rows="5"></textarea>
+    <button id="postMessageBtn">
+        Post Message
+    </button>
 
-        <button id="postMessageBtn">
-            Post Message
-        </button>
-
-    </div>
+</div>
 
     <div id="messageList"></div>
 
