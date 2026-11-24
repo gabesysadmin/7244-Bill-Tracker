@@ -321,6 +321,19 @@ if (adminTabs) {
 
 }
 
+const messageForm =
+    document.getElementById("messageForm");
+
+if (messageForm) {
+
+    if (currentUser.role !== "admin") {
+        messageForm.style.display = "none";
+    } else {
+        messageForm.style.display = "block";
+    }
+
+}
+
     const welcomeMessage =
     document.getElementById("welcomeMessage");
 
@@ -532,11 +545,15 @@ async function loadMessages() {
                 <h3>${message.title}</h3>
 
                 <div class="message-date">
-                    Posted by ${message.postedBy}
-                    on ${postedDate}
-                </div>
+    Posted by ${message.postedBy}
+</div>
 
-                <p>${message.message}</p>
+<div class="message-date">
+    ${postedDate}
+</div>
+
+<p>${message.message}</p>
+
 
             </div>
         `;
