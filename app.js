@@ -478,6 +478,60 @@ if (user.lastReminderSent) {
     });
 }
 
+async function loadMessages() {
+
+    const messageList =
+        document.getElementById("messageList");
+
+    if (!messageList) {
+        return;
+    }
+
+    messageList.innerHTML = "";
+
+    const snapshot =
+        await getDocs(
+            collection(db, "messages")
+        );
+
+    const messages = [];
+
+    snapshot.forEach((doc) => {
+        messages.push(doc.data());
+    });
+
+    messages.sort((a, b) =>
+        (b.postedDate?.seconds || 0) -
+        (a.postedDate?.seconds || 0)
+    );
+
+    messages.forEach((message) => {
+
+        const postedDate =
+            message.postedDate
+                ? message.postedDate
+                    .toDate()
+                    .toLocaleString()
+                : "";
+
+        messageList.innerHTML += `
+            <div class="message-card">
+
+                <h3>${message.title}</h3>
+
+                <div class="message-date">
+                    Posted by ${message.postedBy}
+                    on ${postedDate}
+                </div>
+
+                <p>${message.message}</p>
+
+            </div>
+        `;
+    });
+
+}
+
 form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
