@@ -69,6 +69,10 @@
         Add Bill
     </button>
 
+    <button id="messageBoardTab" class="tab-btn">
+        Message Board
+    </button>
+
     <button id="activityTab" class="tab-btn">
         User Activity
     </button>
@@ -221,6 +225,30 @@
 
 <div id="billList"></div>
 
+<div id="messageBoardSection" style="display:none;">
+
+    <h2>Message Board</h2>
+
+    <div id="messageForm">
+
+        <input
+            id="messageTitle"
+            placeholder="Message Title">
+
+        <textarea
+            id="messageBody"
+            placeholder="Type your message here..."
+            rows="5"></textarea>
+
+        <button id="postMessageBtn">
+            Post Message
+        </button>
+
+    </div>
+
+    <div id="messageList"></div>
+
+</div>
 <div id="activitySection" style="display:none;">
     <h2>User Activity</h2>
 
