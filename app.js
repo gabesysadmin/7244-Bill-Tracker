@@ -25,9 +25,12 @@ let activePersonFilter = "all";
 let showingArchived = false;
 
 const form = document.getElementById("billForm");
+const postMessageBtn =
+    document.getElementById(
+        "postMessageBtn"
+    );
 const billList = document.getElementById("billList");
 const assignedTo = document.getElementById("assignedTo");
-
 const loginBtn = document.getElementById("loginBtn");
 const statusFilter =
     document.getElementById("statusFilter");
@@ -69,6 +72,15 @@ if (statusFilter) {
             loadBills();
         }
     );
+}
+
+if (postMessageBtn) {
+
+    postMessageBtn.addEventListener(
+        "click",
+        postMessage
+    );
+
 }
 
 if (personFilter) {
@@ -529,6 +541,51 @@ async function loadMessages() {
             </div>
         `;
     });
+
+}
+
+async function postMessage() {
+
+    const title =
+        document.getElementById(
+            "messageTitle"
+        ).value.trim();
+
+    const message =
+        document.getElementById(
+            "messageBody"
+        ).value.trim();
+
+    if (!title || !message) {
+
+        alert(
+            "Please enter a title and message."
+        );
+
+        return;
+    }
+
+    await addDoc(
+        collection(db, "messages"),
+        {
+            title,
+            message,
+            postedBy:
+                currentUser.displayname,
+            postedDate:
+                serverTimestamp()
+        }
+    );
+
+    document.getElementById(
+        "messageTitle"
+    ).value = "";
+
+    document.getElementById(
+        "messageBody"
+    ).value = "";
+
+    await loadMessages();
 
 }
 
