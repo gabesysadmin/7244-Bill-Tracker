@@ -1088,6 +1088,12 @@ function setupTabs() {
     const activitySection =
         document.getElementById("activitySection");
 
+    const messageBoardTab =
+    document.getElementById("messageBoardTab");
+
+    const messageBoardSection =
+    document.getElementById("messageBoardSection");
+
     if (!homeTab || !activityTab) {
         return;
     }
@@ -1097,10 +1103,12 @@ function setupTabs() {
     addBillSection.style.display = "none";
     billList.style.display = "";
     activitySection.style.display = "none";
+    messageBoardSection.style.display = "none";
 
     homeTab.classList.add("active");
     addBillTab.classList.remove("active");
     activityTab.classList.remove("active");
+    messageBoardTab.classList.remove("active");
 
 });
 
@@ -1116,15 +1124,33 @@ function setupTabs() {
 
 });
 
+    messageBoardTab.addEventListener("click", async () => {
+
+    addBillSection.style.display = "none";
+    billList.style.display = "none";
+    activitySection.style.display = "none";
+    messageBoardSection.style.display = "block";
+
+    messageBoardTab.classList.add("active");
+    homeTab.classList.remove("active");
+    addBillTab.classList.remove("active");
+    activityTab.classList.remove("active");
+
+    await loadMessages();
+
+});
+
     activityTab.addEventListener("click", async () => {
 
     addBillSection.style.display = "none";
     billList.style.display = "none";
     activitySection.style.display = "block";
+    messageBoardSection.style.display = "none";
 
     activityTab.classList.add("active");
     homeTab.classList.remove("active");
     addBillTab.classList.remove("active");
+    messageBoardTab.classList.remove("active");
 
     await loadUserActivity();
 
