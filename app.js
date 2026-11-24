@@ -802,10 +802,33 @@ if (
 
     });
 
-    bills.sort((a, b) =>
+    bills.sort((a, b) => {
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const aOverdue =
+        a.status !== "Paid" &&
+        new Date(a.dueDate) < today;
+
+    const bOverdue =
+        b.status !== "Paid" &&
+        new Date(b.dueDate) < today;
+
+    if (aOverdue && !bOverdue) {
+        return -1;
+    }
+
+    if (!aOverdue && bOverdue) {
+        return 1;
+    }
+
+    return (
         new Date(a.dueDate) -
         new Date(b.dueDate)
     );
+
+});
 
     bills.forEach((bill) => {
 
