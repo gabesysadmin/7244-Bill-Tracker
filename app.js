@@ -1142,6 +1142,9 @@ function setupTabs() {
     const activitySection =
         document.getElementById("activitySection");
 
+    const homeSection =
+    document.getElementById("homeSection");
+
     const messageBoardTab =
     document.getElementById("messageBoardTab");
 
@@ -1154,20 +1157,20 @@ function setupTabs() {
 
     homeTab.addEventListener("click", () => {
 
+    homeSection.style.display = "block";
+
     addBillSection.style.display = "none";
     billList.style.display = "";
     activitySection.style.display = "none";
     messageBoardSection.style.display = "none";
 
-    homeTab.classList.add("active");
-    addBillTab.classList.remove("active");
-    activityTab.classList.remove("active");
-    messageBoardTab.classList.remove("active");
-
+    ...
 });
 
     addBillTab.addEventListener("click", () => {
 
+    homeSection.style.display = "none";
+    
     addBillSection.style.display = "block";
     billList.style.display = "none";
     activitySection.style.display = "none";
@@ -1180,6 +1183,8 @@ function setupTabs() {
 
     messageBoardTab.addEventListener("click", async () => {
 
+    homeSection.style.display = "none";
+    
     addBillSection.style.display = "none";
     billList.style.display = "none";
     activitySection.style.display = "none";
@@ -1195,6 +1200,8 @@ function setupTabs() {
 });
 
     activityTab.addEventListener("click", async () => {
+
+    homeSection.style.display = "none";
 
     addBillSection.style.display = "none";
     billList.style.display = "none";
