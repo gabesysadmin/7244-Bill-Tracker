@@ -1158,26 +1158,30 @@ function setupTabs() {
     homeTab.addEventListener("click", () => {
 
     homeSection.style.display = "block";
-
     addBillSection.style.display = "none";
     billList.style.display = "";
     activitySection.style.display = "none";
     messageBoardSection.style.display = "none";
 
-    ...
+    homeTab.classList.add("active");
+    addBillTab.classList.remove("active");
+    activityTab.classList.remove("active");
+    messageBoardTab.classList.remove("active");
+
 });
 
     addBillTab.addEventListener("click", () => {
 
     homeSection.style.display = "none";
-    
     addBillSection.style.display = "block";
     billList.style.display = "none";
     activitySection.style.display = "none";
+    messageBoardSection.style.display = "none";
 
     addBillTab.classList.add("active");
     homeTab.classList.remove("active");
     activityTab.classList.remove("active");
+    messageBoardTab.classList.remove("active");
 
 });
 
