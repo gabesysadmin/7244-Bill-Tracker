@@ -32,6 +32,19 @@ messaging.onBackgroundMessage(
         requireInteraction: true
     }
 );
+      self.addEventListener("notificationclick", (event) => {
+
+    event.notification.close();
+
+    event.waitUntil(
+
+        clients.openWindow(
+            "https://gabesysadmin.github.io/7244-Bill-Tracker/?page=messages"
+        )
+
+    );
+
+});
 
     }
 );
