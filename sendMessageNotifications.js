@@ -84,7 +84,7 @@ const db = admin.firestore();
         data: {
 
     title:
-        `📬 ${message.title}`,
+        "🏠 Household Update",
 
     body:
         message.message
