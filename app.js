@@ -558,8 +558,13 @@ async function loadMessages() {
     const messages = [];
 
     snapshot.forEach((doc) => {
-        messages.push(doc.data());
+
+    messages.push({
+        id: doc.id,
+        ...doc.data()
     });
+
+});
 
     messages.sort((a, b) => {
 
@@ -605,10 +610,44 @@ async function loadMessages() {
 
 <p>${message.message}</p>
 
+${
+    currentUser.role === "admin"
+    ? `
+        <button
+            class="delete-btn"
+            onclick="deleteMessage('${message.id}')">
+            Delete Message
+        </button>
+      `
+    : ""
+}
+
 
             </div>
         `;
     });
+
+}
+
+async function deleteMessage(id) {
+
+    if (
+        !confirm(
+            "Delete this message?"
+        )
+    ) {
+        return;
+    }
+
+    await deleteDoc(
+        doc(
+            db,
+            "messages",
+            id
+        )
+    );
+
+    await loadMessages();
 
 }
 
