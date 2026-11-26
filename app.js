@@ -628,6 +628,8 @@ ${
     });
 
 }
+window.deleteMessage =
+    deleteMessage;
 
 async function deleteMessage(id) {
 
