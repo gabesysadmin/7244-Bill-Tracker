@@ -76,18 +76,23 @@ const db = admin.firestore();
             try {
 
                 await admin
-                    .messaging()
-                    .send({
+    .messaging()
+    .send({
 
-                        token:
-                            user.token,
+        token:
+            user.token,
 
-                        data: {
-    title: "New Household Message",
-    body: message.title
-}
+        notification: {
 
-                    });
+            title:
+                `📬 ${message.title}`,
+
+            body:
+                message.message.substring(0, 120)
+
+        }
+
+    });
 
                 sent++;
 
