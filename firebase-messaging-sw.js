@@ -24,12 +24,14 @@ messaging.onBackgroundMessage(
     (payload) => {
 
         self.registration.showNotification(
-            payload.notification.title,
-            {
-                body:
-                    payload.notification.body
-            }
-        );
+    payload.notification.title,
+    {
+        body: payload.notification.body,
+        icon: "/7244-Bill-Tracker/icon-192.png",
+        badge: "/7244-Bill-Tracker/icon-192.png",
+        requireInteraction: true
+    }
+);
 
     }
 );
