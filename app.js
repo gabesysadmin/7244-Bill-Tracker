@@ -266,7 +266,7 @@ await updateDoc(
         JSON.stringify(currentUser)
     );
 
-    showApp();
+    ;
 
     loadUsers();
 }
@@ -328,6 +328,35 @@ if (messageForm) {
 if (welcomeMessage) {
     welcomeMessage.innerText =
         `Welcome, ${currentUser.displayname}`;
+}
+
+const addBillTab =
+    document.getElementById("addBillTab");
+
+const activityTab =
+    document.getElementById("activityTab");
+
+if (currentUser.role !== "admin") {
+
+    if (addBillTab) {
+        addBillTab.style.display = "none";
+    }
+
+    if (activityTab) {
+        activityTab.style.display = "none";
+    }
+
+}
+else {
+
+    if (addBillTab) {
+        addBillTab.style.display = "";
+    }
+
+    if (activityTab) {
+        activityTab.style.display = "";
+    }
+
 }
 
 const lastLoginInfo =
