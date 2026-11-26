@@ -23,27 +23,31 @@ const messaging =
 messaging.onBackgroundMessage(
     (payload) => {
 
+        console.log(payload);
+
         self.registration.showNotification(
-    payload.data.title,
-    {
-        body: payload.data.body,
-        icon: "/7244-Bill-Tracker/icon-192.png",
-        badge: "/7244-Bill-Tracker/icon-192.png"
+            payload.data.title,
+            {
+                body: payload.data.body,
+                icon: "/7244-Bill-Tracker/icon-192.png",
+                badge: "/7244-Bill-Tracker/icon-192.png"
+            }
+        );
+
     }
 );
-      self.addEventListener("notificationclick", (event) => {
 
-    event.notification.close();
+self.addEventListener(
+    "notificationclick",
+    (event) => {
 
-    event.waitUntil(
+        event.notification.close();
 
-        clients.openWindow(
-            "https://gabesysadmin.github.io/7244-Bill-Tracker/?page=messages"
-        )
-
-    );
-
-});
+        event.waitUntil(
+            clients.openWindow(
+                "https://gabesysadmin.github.io/7244-Bill-Tracker/?page=messages"
+            )
+        );
 
     }
 );
