@@ -82,15 +82,10 @@ const db = admin.firestore();
                         token:
                             user.token,
 
-                        notification: {
-
-                            title:
-                                "New Household Message",
-
-                            body:
-                                message.title
-
-                        }
+                        data: {
+    title: "New Household Message",
+    body: message.title
+}
 
                     });
 
