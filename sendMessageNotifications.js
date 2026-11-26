@@ -45,7 +45,7 @@ const db = admin.firestore();
 
     usersSnapshot.forEach((doc) => {
 
-        const user = doc.data();
+        const user = doc.();
 
         if (
             user.notificationsEnabled === true &&
@@ -67,7 +67,7 @@ const db = admin.firestore();
     ) {
 
         const message =
-            messageDoc.data();
+            messageDoc.();
 
         let sent = 0;
 
@@ -82,15 +82,15 @@ const db = admin.firestore();
         token:
             user.token,
 
-        notification: {
+        data: {
 
-            title:
-                `📬 ${message.title}`,
+    title:
+        `📬 ${message.title}`,
 
-            body:
-                message.message.substring(0, 120)
+    body:
+        message.message
 
-        }
+}
 
     });
 
