@@ -262,13 +262,13 @@ await updateDoc(
     }
 );
     localStorage.setItem(
-        "currentUser",
-        JSON.stringify(currentUser)
-    );
+    "currentUser",
+    JSON.stringify(currentUser)
+);
 
-    ;
+showApp();
 
-    loadUsers();
+loadUsers();
 }
 
 function logout() {
