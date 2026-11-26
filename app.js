@@ -393,6 +393,25 @@ if (lastLoginInfo) {
     loadBills();
     setupTabs();
 
+    const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+if (params.get("page") === "messages") {
+
+    setTimeout(() => {
+
+        document
+            .getElementById(
+                "messageBoardTab"
+            )
+            ?.click();
+
+    }, 250);
+
+}
+
 const addBillSection =
     document.getElementById("addBillSection");
 
